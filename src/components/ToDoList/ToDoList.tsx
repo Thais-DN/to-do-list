@@ -1,6 +1,6 @@
 // components/TodoList.tsx
 "use client";
-import { Plus } from "lucide-react";
+import { Plus, X, Edit2, Check } from "lucide-react";
 import { useState, FormEvent } from "react";
 
 type TodoItem = {
@@ -12,32 +12,60 @@ type TodoItem = {
 export default function TodoList() {
     const [todos, setTodos] = useState<TodoItem[]>([]);
     const [inputValue, setInputValue] = useState("");
+    const [edit, setEdit] = useState<{ id: number | null; text: string }>({
+        id: null,
+        text: "",
+    });
 
     const capitalizeFirstLetter = (string: string) => {
         return string.charAt(0).toUpperCase() + string.slice(1);
     };
 
     const addTodo = (event: FormEvent) => {
-        event.preventDefault(); // Previne o comportamento padrão do formulário
+        event.preventDefault();
         const capitalizedText = capitalizeFirstLetter(inputValue);
         const newTodo: TodoItem = {
             id: Date.now(),
             text: capitalizedText,
-            completed: false, // Inicializado como false
+            completed: false,
         };
         setTodos([...todos, newTodo]);
         setInputValue("");
     };
 
+    const deleteTodo = (id: number) => {
+        setTodos(todos.filter((todo) => todo.id !== id));
+    };
+
     const toggleTodoCompletion = (id: number) => {
         setTodos(
-            todos.map((todo) => {
-                if (todo.id === id) {
-                    return { ...todo, completed: !todo.completed };
-                }
-                return todo;
-            })
+            todos.map((todo) =>
+                todo.id === id ? { ...todo, completed: !todo.completed } : todo
+            )
         );
+    };
+
+    const startEdit = (todo: TodoItem) => {
+        setEdit({ id: todo.id, text: todo.text });
+    };
+
+    const cancelEdit = () => {
+        setEdit({ id: null, text: "" });
+    };
+
+    const submitEdit = (id: number) => {
+        setTodos(
+            todos.map((todo) =>
+                todo.id === id
+                    ? { ...todo, text: capitalizeFirstLetter(edit.text) }
+                    : todo
+            )
+        );
+        cancelEdit();
+    };
+
+    const handleEditChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setEdit({ ...edit, text: event.target.value });
     };
 
     return (
@@ -54,7 +82,7 @@ export default function TodoList() {
                     type="submit"
                     className="border bg-slate-700 rounded-lg p-2"
                 >
-                    <Plus className="size-6 stroke-current text-white" />
+                    <Plus className="stroke-current text-white" />
                 </button>
             </form>
 
@@ -68,11 +96,49 @@ export default function TodoList() {
                                 onChange={() => toggleTodoCompletion(todo.id)}
                                 className="mr-2"
                             />
-                            <span
-                                className={todo.completed ? "line-through" : ""}
-                            >
-                                {todo.text}
-                            </span>
+                            {edit.id === todo.id ? (
+                                <>
+                                    <input
+                                        value={edit.text}
+                                        onChange={handleEditChange}
+                                        className="flex-grow mr-2 p-1 border rounded"
+                                    />
+                                    <button
+                                        onClick={() => submitEdit(todo.id)}
+                                        className="p-1"
+                                    >
+                                        <Check className="stroke-current text-green-500" />
+                                    </button>
+                                    <button
+                                        onClick={cancelEdit}
+                                        className="p-1"
+                                    >
+                                        <X className="stroke-current text-red-500" />
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    <span
+                                        className={`flex-grow ${
+                                            todo.completed ? "line-through" : ""
+                                        }`}
+                                    >
+                                        {todo.text}
+                                    </span>
+                                    <button
+                                        onClick={() => startEdit(todo)}
+                                        className="p-1"
+                                    >
+                                        <Edit2 className="stroke-current text-blue-500" />
+                                    </button>
+                                    <button
+                                        onClick={() => deleteTodo(todo.id)}
+                                        className="p-1"
+                                    >
+                                        <X className="stroke-current text-red-500" />
+                                    </button>
+                                </>
+                            )}
                         </li>
                     ))}
                 </ul>
