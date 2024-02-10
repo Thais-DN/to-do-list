@@ -5,13 +5,20 @@ import { ItemList } from "./ItemList";
 import { TodoItemType } from "./TodoItemType";
 
 const TodoList: React.FC = () => {
-    const savedTodos = localStorage.getItem("todos");
-    const todosStorage = savedTodos ? JSON.parse(savedTodos) : [];
-
-    const [todos, setTodos] = useState<TodoItemType[]>(todosStorage);
+    const [todos, setTodos] = useState<TodoItemType[]>([]);
 
     useEffect(() => {
-        localStorage.setItem("todos", JSON.stringify(todos));
+        // Carregar os todos do localStorage apenas no lado do cliente
+        const savedTodos = localStorage.getItem("todos");
+        const todosStorage = savedTodos ? JSON.parse(savedTodos) : [];
+        setTodos(todosStorage);
+    }, []);
+
+    useEffect(() => {
+        // Salvar os todos no localStorage apenas no lado do cliente
+        if (typeof window !== "undefined") {
+            localStorage.setItem("todos", JSON.stringify(todos));
+        }
     }, [todos]);
 
     const addTodo = (text: string) => {
