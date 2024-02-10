@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { X, Edit3, Check, Pencil, Trash2 } from "lucide-react";
+import { Check, Pencil, Trash2 } from "lucide-react";
 import { TodoItemType } from "./TodoItemType";
+import confetti from "canvas-confetti";
 
 type ItemListProps = {
     todos: TodoItemType[];
@@ -16,8 +17,38 @@ export const ItemList: React.FC<ItemListProps> = ({
     onEditTodo,
 }) => {
     const [editingText, setEditingText] = useState("");
+    const [currentlyEditingId, setCurrentlyEditingId] = useState<number | null>(
+        null
+    );
+
+    const handleEditClick = (todo: TodoItemType) => {
+        setCurrentlyEditingId(todo.id);
+        setEditingText(todo.text);
+    };
+
+    const handleSaveClick = (id: number) => {
+        onEditTodo(id, editingText);
+        setCurrentlyEditingId(null);
+        setEditingText(""); // Limpar o texto de edição após salvar
+    };
+    const handleKeyDown = (event: React.KeyboardEvent, id: number) => {
+        if (event.key === "Enter") {
+            handleSaveClick(id);
+        }
+    };
 
     const ToggleComplete = (id: number) => {
+        const todo = todos.find((todo) => todo.id === id);
+        if (todo && !todo.completed) {
+            confetti({
+                angle: 90,
+                spread: 90,
+                particleCount: 500,
+                origin: { y: 0.6 },
+            });
+            console.log("estou aqui");
+        }
+
         setTodos(
             todos.map((todo) => {
                 if (todo.id === id) {
@@ -29,13 +60,13 @@ export const ItemList: React.FC<ItemListProps> = ({
     };
 
     return (
-        <div>
+        <div className="overflow-auto max-h-scroll">
             {todos.map((todo) => (
                 <div
                     key={todo.id}
-                    className="flex justify-between group items-center p-1 my-4 border rounded-lg bg-slate-300/40 hover:bg-slate-300"
+                    className="flex justify-between w-item group p-1 mb-4 border rounded-lg bg-slate-300/40 hover:bg-slate-300"
                 >
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-start item">
                         <input
                             type="checkbox"
                             checked={todo.completed}
@@ -43,7 +74,7 @@ export const ItemList: React.FC<ItemListProps> = ({
                             className="appearance-none h-0 w-0 opacity-0"
                         />
                         <div
-                            className={`size-5 mr-2 flex items-center justify-center border-2 rounded  ${
+                            className={`min-h-5 min-w-5 mt-1.5 mx-2 flex items-start justify-center border-2 rounded  ${
                                 todo.completed
                                     ? "bg-slate-500 border-slate-900"
                                     : "border-slate-500"
@@ -64,29 +95,30 @@ export const ItemList: React.FC<ItemListProps> = ({
                                 </svg>
                             )}
                         </div>
-                        {todo.isEditing ? (
+                        {currentlyEditingId === todo.id ? (
                             <input
                                 type="text"
                                 value={editingText}
                                 onChange={(e) => setEditingText(e.target.value)}
-                                className="p-1 border rounded bg-slate-200/40 group-hover:bg-slate-300"
+                                onKeyDown={(e) => handleKeyDown(e, todo.id)}
+                                className="p-1 border rounded bg-slate-200/40 group-hover:bg-slate-300 focus:outline-none"
                             />
                         ) : (
-                            <span
-                                className={todo.completed ? "line-through" : ""}
+                            <p
+                                className={`${
+                                    todo.completed && "line-through"
+                                } mt-1`}
                             >
                                 {todo.text}
-                            </span>
+                            </p>
                         )}
                     </div>
 
-                    <div>
-                        {todo.isEditing ? (
+                    <div className="flex items-start">
+                        {currentlyEditingId === todo.id ? (
                             <>
                                 <button
-                                    onClick={() =>
-                                        onEditTodo(todo.id, editingText)
-                                    }
+                                    onClick={() => handleSaveClick(todo.id)}
                                     className="p-1"
                                 >
                                     <Check className="stroke-current size-7 text-green-700" />
@@ -95,10 +127,7 @@ export const ItemList: React.FC<ItemListProps> = ({
                         ) : (
                             <div className="flex">
                                 <button
-                                    onClick={() => {
-                                        setEditingText(todo.text);
-                                        todo.isEditing = true;
-                                    }}
+                                    onClick={() => handleEditClick(todo)}
                                     className="p-1"
                                 >
                                     <Pencil className="stroke-current  text-sky-800" />

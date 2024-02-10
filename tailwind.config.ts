@@ -11,6 +11,12 @@ const config: Config = {
             minHeight: {
                 height: "700px",
             },
+            maxHeight: {
+                scroll: "650px",
+            },
+            width: {
+                item: "330px",
+            },
             backgroundImage: {
                 "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
                 "gradient-conic":
