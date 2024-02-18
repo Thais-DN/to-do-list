@@ -1,4 +1,4 @@
-# Todo Application
+# To Do List
 
 Este é um aplicativo de lista de tarefas (Todo) interativo que permite aos usuários gerenciar suas tarefas diárias de forma eficiente e divertida. Com uma interface de usuário simples e intuitiva e animações atraentes para melhorar a experiência do usuário.
 
@@ -12,7 +12,7 @@ Este é um aplicativo de lista de tarefas (Todo) interativo que permite aos usu�
 
 ## Demonstração
 
-Este aplicativo está hospedado e pode ser acessado através do seguinte link: [Todo App](https://to-do-list-3an5.vercel.app/)
+Este aplicativo está hospedado e pode ser acessado através do seguinte link: [To Do List](https://to-do-list-3an5.vercel.app/)
 
 ## Tecnologias Utilizadas
 
