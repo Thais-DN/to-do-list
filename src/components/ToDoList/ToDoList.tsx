@@ -8,14 +8,12 @@ const TodoList: React.FC = () => {
     const [todos, setTodos] = useState<TodoItemType[]>([]);
 
     useEffect(() => {
-        // Carregar os todos do localStorage apenas no lado do cliente
         const savedTodos = localStorage.getItem("todos");
         const todosStorage = savedTodos ? JSON.parse(savedTodos) : [];
         setTodos(todosStorage);
     }, []);
 
     useEffect(() => {
-        // Salvar os todos no localStorage apenas no lado do cliente
         if (typeof window !== "undefined") {
             localStorage.setItem("todos", JSON.stringify(todos));
         }
@@ -49,7 +47,7 @@ const TodoList: React.FC = () => {
     };
 
     return (
-        <div className="min-h-height border-2 rounded-lg border-slate-400 p-4 max-w-96 mx-auto mt-4">
+        <div className="min-h-height border-2 rounded-lg border-slate-600 p-4 max-w-96 mx-auto mt-4">
             <NewItem onAddTodo={addTodo} />
 
             <ItemList
