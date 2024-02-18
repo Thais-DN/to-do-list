@@ -9,6 +9,7 @@ Este é um aplicativo de lista de tarefas (Todo) interativo que permite aos usu�
 -   **Marcação de Tarefas**: Marque as tarefas como concluídas com um simples clique em uma checkbox.
 -   **Animação de Confete**: Quando uma tarefa é marcada como concluída, uma animação de confete é exibida para um feedback divertido e gratificante.
 -   **Responsivo**: Design responsivo que se adapta a diferentes tamanhos de tela.
+-   **Dark mode**: Opção de modo dark para melhorar a experiência do usuário.
 
 ## Demonstração
 
