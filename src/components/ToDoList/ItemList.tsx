@@ -4,6 +4,7 @@ import { TodoItemType } from "./TodoItemType";
 import confetti from "canvas-confetti";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
+import { Toaster, toast } from "sonner";
 
 type ItemListProps = {
     todos: TodoItemType[];
@@ -63,23 +64,23 @@ export const ItemList: React.FC<ItemListProps> = ({
     };
 
     return (
-        <ScrollArea.Root className="overflow-auto max-h-scroll">
-            <ScrollArea.Viewport>
+        <ScrollArea.Root className="overflow-auto ">
+            <ScrollArea.Viewport className="max-h-scroll">
                 <div ref={parent}>
                     {todos.map((todo) => (
                         <div
                             key={todo.id}
                             className="flex justify-between w-item group p-1 mb-4 border rounded-lg text-slate-800 bg-slate-300/40 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 dark:border-violet-300 dark:text-slate-200"
                         >
-                            <div className="flex items-start item">
+                            <div className="flex items-start item ">
                                 <input
                                     type="checkbox"
                                     checked={todo.completed}
                                     onChange={() => ToggleComplete(todo.id)}
-                                    className="appearance-none h-0 w-0 opacity-0"
+                                    className="appearance-none h-0 w-0 opacity-0 "
                                 />
                                 <div
-                                    className={`min-h-5 min-w-5 mt-1.5 mx-2 flex items-start justify-center border-2 rounded  ${
+                                    className={`min-h-5 min-w-5 mt-1.5 mx-2 flex items-start justify-center border-2 rounded cursor-pointer ${
                                         todo.completed
                                             ? "bg-slate-400 border-slate-500 dark:border-violet-400 dark:bg-slate-600"
                                             : "border-slate-500 dark:border-violet-400"
@@ -132,7 +133,7 @@ export const ItemList: React.FC<ItemListProps> = ({
                                             }
                                             className="p-1"
                                         >
-                                            <Check className="stroke-current size-7 text-green-700 dark:text-green-500" />
+                                            <Check className="stroke-current size-7 text-green-700 dark:text-violet-300 dark:hover:text-green-400" />
                                         </button>
                                     </>
                                 ) : (
@@ -143,7 +144,7 @@ export const ItemList: React.FC<ItemListProps> = ({
                                             }
                                             className="p-1"
                                         >
-                                            <Pencil className="stroke-current  text-sky-800 dark:text-violet-300" />
+                                            <Pencil className="stroke-current  text-sky-800 hover:text-sky-950 dark:text-violet-300 dark:hover:text-sky-400" />
                                         </button>
                                         <button
                                             onClick={() =>
@@ -151,7 +152,7 @@ export const ItemList: React.FC<ItemListProps> = ({
                                             }
                                             className="p-1"
                                         >
-                                            <Trash2 className="stroke-current text-red-800 dark:text-violet-300" />
+                                            <Trash2 className="stroke-current text-red-800 hover:text-red-950 dark:text-violet-300 dark:hover:text-red-400" />
                                         </button>
                                     </div>
                                 )}

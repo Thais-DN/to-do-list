@@ -47,7 +47,7 @@ const TodoList: React.FC = () => {
     };
 
     return (
-        <div className="min-h-height border-2 rounded-lg border-slate-600 p-4 max-w-96 mx-auto mt-4">
+        <div className="h-todo min-h-96 border-2 rounded-lg border-slate-600 p-4 w-96 mx-auto mt-4">
             <NewItem onAddTodo={addTodo} />
 
             <ItemList

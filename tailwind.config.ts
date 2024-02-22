@@ -9,14 +9,14 @@ const config: Config = {
     ],
     theme: {
         extend: {
-            minHeight: {
-                height: "700px",
+            height: {
+                todo: "700px",
             },
             maxHeight: {
-                scroll: "650px",
+                scroll: "600px",
             },
             width: {
-                item: "330px",
+                item: "347px",
             },
             backgroundImage: {
                 "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
